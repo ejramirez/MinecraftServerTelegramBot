@@ -1,4 +1,5 @@
 import logging, json
+from src.mcsrvstat import getJSON, isOnline, getPlayerList
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
 isProdEnvironment = False
@@ -19,8 +20,8 @@ with open('bot_properties.json' ,'r') as f:
     properties_dict = json.load(f)
 bot_token = properties_dict["credentials"]["bot_token"] if isProdEnvironment else properties_dict["credentials"]["devl_bot_token"]
 
-def help():
-    return
+def help(bot, update):
+    bot.send_message(chat_id=update.message.chat_id, text="TODO Help Menu")
 
 def error(bot, update):
     logging.warning('Bot "%s" casued error "%s"', bot, update.error)
@@ -34,6 +35,9 @@ def main():
 
     # Command Handlers
     dp.add_handler(CommandHandler("help", help))
+    dp.add_handler(CommandHandler("json", getJSON, pass_args=True))
+    dp.add_handler(CommandHandler("check", isOnline, pass_args=True))
+    dp.add_handler(CommandHandler("players", getPlayerList, pass_args=True))
 
     # Message Handlers
 
